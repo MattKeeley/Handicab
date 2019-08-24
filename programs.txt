@@ -1,0 +1,111 @@
+brick = ConnectBrick('DT');
+brick.playTone(100, 800, 500);
+v = brick.GetBattVoltage();
+
+global key
+InitKeyboard();
+
+while 1
+    pause(.1);
+    switch key
+        case 'c'
+           % Connect;
+        case 'uparrow'
+            brick.MoveMotor('AB', -40);
+        case 'downarrow'
+            brick.MoveMotor('AB', 40);
+        case 'leftarrow'
+            brick.MoveMotor('A', -20);
+            brick.MoveMotor('B', 20);
+        case 'rightarrow'
+            brick.MoveMotor('A', 20);
+            brick.MoveMotor('B', -21);           
+        case 'u'
+            brick.MoveMotor('C', 35);
+        case 'd'
+            brick.MoveMotor('C', -35);
+        case 0
+            brick.StopAllMotors('Brake');
+        case 'b'
+            brick.beep;
+            pause(.1);
+        case 'q'
+            brick.StopAllMotors('Coast');
+            break;
+    end
+end
+CloseKeyboard();
+
+
+
+
+
+
+Programs to do:
+
+Manual control:
+	Turn 90deg left
+	Turn 90deg right
+
+	If lift in starting position
+	Move down(x-sec)
+	Move lift with person up(x-sec)
+	Move lift down to drop person off(x-sec)
+	Reverse to not hit person
+	Reset left to starting position(x-sec)
+
+
+Automating:
+	Maze solving
+
+
+
+
+global key
+InitKeyboard();
+
+while 1
+    switch key
+        case 'uparrow'
+            brick.MoveMotor('AB', -40);
+        case 'downarrow'
+            brick.MoveMotor('AB', 40);
+        case 'leftarrow'
+            brick.MoveMotor('A', -20);
+            brick.MoveMotor('B', 20);
+        case 'rightarrow'
+            brick.MoveMotor('A', 20);
+            brick.MoveMotor('B', -21);
+        case 'u'
+            brick.MoveMotor('C', 35);
+        case 'd'
+            brick.MoveMotor('C', -35);
+        case 'l'
+            brick.MoveMotor('A', -20);
+            brick.MoveMotor('B', 20);
+            pause(1.2);
+        case 'r'
+            brick.MoveMotor('A', -20);
+            brick.MoveMotor('B', 20);
+            pause(1.2);
+        case 0
+            brick.StopAllMotors('Brake');
+        case 'b'
+            brick.beep;
+            pause(.1);
+        case 'm'
+            distance = brick.UltrasonicDist(1);  % Get distance to the nearest object.
+            display(distance);
+            brick.MoveMotor('AB', -40);
+            while distance > 35
+                distance = brick.UltrasonicDist(1);
+            end
+            brick.StopAllMotors('Brake');
+        case 'q'
+            brick.StopAllMotors('Coast');
+            break;
+    end
+end
+CloseKeyboard();
+
+

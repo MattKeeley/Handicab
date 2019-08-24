@@ -1,0 +1,78 @@
+
+color = brick.ColorColor(2);
+distance1 = brick.UltrasonicDist(1); %front distance
+distance3 = brick.UltrasonicDist(3); %left side distance
+done = 0;
+pickup = 0; %0 not picked up yet, 1 picked up
+brick.MoveMotor('AB', -40);
+while (done == 0)
+    color = brick.ColorColor(2);
+    distance1 = brick.UltrasonicDist(1); %front distance
+    distance3 = brick.UltrasonicDist(3); %front distance
+    if(color == 5) %stop sign
+        brick.StopAllMotors('Brake');
+        pause(1);
+        brick.MoveMotor('AB', -40);
+        pause(1);
+    end
+    if((color == 2) && (pickup == 0)) %pickup
+        brick.StopAllMotors('Brake');
+        pickup = 1;
+        control;
+        brick.MoveMotor('AB', -40);
+    end
+    if((color == 3) && (pickup == 1)) %dropoff
+        brick.StopAllMotors('Brake');
+        control;
+        brick.StopAllMotors('Brake');
+        done = 1;
+    end
+    if(distance3 > 30) %turn left when space on left
+        pause(1);
+        brick.StopAllMotors('Brake');
+        angle = brick.GyroAngle(4);  % Get the current Gyro angle
+            display(angle);% Print angle.
+            
+            sangle = brick.GyroAngle(4);
+            eangle = (brick.GyroAngle(4) - 81);
+            
+            brick.MoveMotor('A', -16);
+            brick.MoveMotor('B', 16);
+            while angle > eangle
+                angle = brick.GyroAngle(4);
+            end
+            brick.StopAllMotors('Brake');
+            brick.ResetMotorAngle('A');
+            brick.ResetMotorAngle('B');
+        brick.MoveMotor('AB', -40);
+        pause(1.2); %move for a second
+    end
+    if(distance1 < 31) %turn right when wall in front
+        brick.StopAllMotors('Brake');
+            display(angle);% Print angle.
+            
+            sangle = brick.GyroAngle(4);
+            eangle = (brick.GyroAngle(4) + 81);
+            
+            brick.MoveMotor('A', 16);
+            brick.MoveMotor('B', -16);
+            while angle < eangle
+                angle = brick.GyroAngle(4);
+            end
+            brick.StopAllMotors('Brake');
+            brick.ResetMotorAngle('A');
+            brick.ResetMotorAngle('B');
+            
+            brick.MoveMotor('AB', -40);
+    end
+end
+
+%
+%drive unless
+%floor red
+%floor green
+%floor blue
+%wall in front
+%wall not on side
+
+

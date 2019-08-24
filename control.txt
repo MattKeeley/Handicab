@@ -1,0 +1,78 @@
+global key
+InitKeyboard();
+
+while 1
+    pause(.1);
+    switch key
+        case 'c'
+            connect;
+            break;
+        case 'uparrow'
+            brick.MoveMotor('AB', -40);
+        case 'downarrow'
+            brick.MoveMotor('AB', 40);
+        case 'leftarrow'
+            brick.MoveMotor('A', -20);
+            brick.MoveMotor('B', 20);
+        case 'rightarrow'
+            brick.MoveMotor('A', 20);
+            brick.MoveMotor('B', -20);
+        case 't'
+            angle = brick.GyroAngle(4);  % Get the current Gyro angle
+            display(angle);% Print angle.
+            
+            sangle = brick.GyroAngle(4);
+            eangle = (brick.GyroAngle(4) - 81);
+            
+            brick.MoveMotor('A', -16);
+            brick.MoveMotor('B', 16);
+            while angle > eangle
+                angle = brick.GyroAngle(4);
+            end
+            brick.StopAllMotors('Brake');
+            brick.ResetMotorAngle('A');
+            brick.ResetMotorAngle('B');
+            
+        case 'u'
+            brick.MoveMotor('C', 35);
+        case 'd'
+            brick.MoveMotor('C', -35);
+        case 0
+            brick.StopAllMotors('Brake');
+        case 'm'
+            distance = brick.UltrasonicDist(1);  % Get distance to the nearest object.
+            display(distance);
+            brick.MoveMotor('AB', -40);
+            while distance > 35
+                distance = brick.UltrasonicDist(1);
+            end
+            brick.StopAllMotors('Brake');
+        case 'z'
+            % 0 unknown
+            % 1 black
+            % 2 Blue
+            % 3 Green
+            % 4 Yellow
+            % 5 Red
+            % 6 White
+            % 7 Brown
+            color = brick.ColorColor(2);
+            display(color);
+            brick.MoveMotor('AB', -40);
+            while color ~= 5
+                color = brick.ColorColor(2);
+            end
+            brick.StopAllMotors('Brake');
+            pause(2);
+            brick.MoveMotor('AB', -40);
+            brick.StopAllMotors('Brake');
+        case 'b'
+            brick.beep;
+            pause(.1);
+        case 'q'
+            brick.StopAllMotors('Brake');
+            break;
+    end
+end
+CloseKeyboard();
+

@@ -1,0 +1,4 @@
+brick = ConnectBrick('DT');
+v = brick.GetBattVoltage();
+
+
